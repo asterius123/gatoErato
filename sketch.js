@@ -27,7 +27,12 @@ function preload() {
     - animação rato3: mouse4
     **não esquecer de colocar caminho pra imagem ("pasta/nomedaimagem.png")
     */
+    jerrySprite = loadAnimation("imagens/mouse1.png");
+    jerryChamando = loadAnimation("imagens/mouse2.png","imagens/mouse3.png");
+    jerryFim = loadAnimation("imagens/mouse4.png");
     tomSprite = loadAnimation("imagens/cat1.png");
+    tomCorrendo =loadAnimation("imagens/cat2.png","imagens/cat3.png");
+    tomFim = loadAnimation("imagens/cat4.png");
     fundotela = loadImage("imagens/garden.png");
 }
 
@@ -39,21 +44,38 @@ function setup() {
     tom = createSprite(700, 700);
     //crie os sprites de Tom e Jerry e adicione as animações aqui
   //para adicionar animações use sprite.addAnimation();
+    tom.addAnimation("deitado", tomSprite);
+    tom.scale=0.15
+    tom.addAnimation("movendo", tomCorrendo);
+    tom.addAnimation("tfim", tomFim);
+    jerry.addAnimation("parado", jerrySprite);
+    jerry.scale=0.1;
+    jerry.addAnimation("chamando", jerryChamando);
+    jerry.addAnimation("jfim", jerryFim);
+    //jerry.debug=true
+    //tom.debug=true
+    jerry.setCollider("circle",0,0,1200);
+    tom.setCollider("circle",0,0,1300);
     
-
 }
 
 function draw() {
 //coloque a imagem de fundo aqui
     background(fundotela);
-    tom.addAnimation(tomSprite);
+    
+    
 /*
 Ao fim do código, quando acabar o function draw(), escreva uma função para quando a seta para a esquerda for apertada. 
 Execute a função criada dentro de function draw()
 */
 
   //se o Tom e o Jerry colidirem, pare os sprites e mude suas animações para as animações do fim
-    keyPressed()
+  if(jerry.x  - tom.x < tom.width/2 + jerry.width/2 && tom.x - jerry.x < tom.width/2 + jerry.width/2){
+     tom.velocityX=0;
+     tom.changeAnimation("tfim",tomFim);
+     jerry.changeAnimation("jfim",jerryFim);
+     }
+    
     drawSprites();
 }
 
@@ -62,8 +84,9 @@ function keyPressed() {
   
   //if(keyCode === LEFT_ARROW){}
     if(keyCode === LEFT_ARROW){
-    fantasma.x=fantasma.x-3
-      
+      tom.changeAnimation("movendo",tomCorrendo);
+      tom.velocityX = -3
+      jerry.changeAnimation("chamando", jerryChamando);
     }
 
     // se a seta para a esquerda for pressionada, faça o Tom ir para a esquerda e mude as animações do Tom e do Jerry
